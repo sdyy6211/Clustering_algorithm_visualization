@@ -9,7 +9,7 @@ simple implementation of clustering methods on toy dataset
 |:--:| 
 | *Figure2. Gaussian Mixture Model* |
 
-![](https://github.com/sdyy6211/clustering_examples/blob/main/animation/hierarchical_clustering.gif?raw=true)
+![](https://github.com/sdyy6211/clustering_examples/blob/main/animation/hierarchical_clustering_.gif?raw=true)
 |:--:| 
 | *Figure3. Hierarchical Clustering* |
 
