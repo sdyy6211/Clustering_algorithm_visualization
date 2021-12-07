@@ -201,11 +201,19 @@ def e_step(X,Mu,Sigma,Phi,W):
     
     return W
 
-def m_step(X,W,Mu,Sigma,Phi):
+def m_step(X,W,Mu,Sigma,Phi,covariance_type):
     
     K = len(Mu)
     
     N = X.shape[0]
+    
+    D = X.shape[1]
+    
+    Mu_new = Mu.copy()
+    
+    Sigma_new = Sigma.copy()
+    
+    Phi_new = Phi.copy()
     
     for i in range(K):
     
@@ -218,18 +226,52 @@ def m_step(X,W,Mu,Sigma,Phi):
         phi = Phi[i]
 
         mu_update = (w.reshape(-1,1) * X).sum(axis = 0)/w.sum(axis = 0)
+        
+        if covariance_type == "full":
 
-        sigma_update = ((w.reshape(-1,1)*(X-mu))/w.reshape(-1,1).sum(axis = 0)).T@(X-mu)
+            sigma_update = ((w.reshape(-1,1)*(X-mu))/w.reshape(-1,1).sum(axis = 0)).T@(X-mu)
+            
+        elif covariance_type == 'tied':
+            
+            sigma_update = ((w.reshape(-1,1)*(X-mu))/w.reshape(-1,1).sum(axis = 0)).T@(X-mu)
+            
+        elif covariance_type == 'diag':
+            
+            sigma_update = np.zeros((D,D))
+            
+            sigma_diag = w.reshape(-1,1).T@(X*X)/w.sum() - 2*mu*(w.reshape(-1,1).T@X)/w.sum()+mu**2
+            
+            np.fill_diagonal(sigma_update,sigma_diag)
+            
+        elif covariance_type == 'spherical':
+            
+            sigma_update = np.zeros((D,D))
+            
+            sigma_diag = w.reshape(-1,1).T@(X*X)/w.sum() - 2*mu*(w.reshape(-1,1).T@X)/w.sum()+mu**2
+            
+            np.fill_diagonal(sigma_update,sigma_diag)
 
         phi_update = w.sum(axis = 0)/N
 
-        Mu[i] = mu_update
+        Mu_new[i,:] = mu_update
 
-        Sigma[i] = sigma_update
+        Sigma_new[i,:,:] = sigma_update
 
-        Phi[i] = phi_update
+        Phi_new[i,:] = phi_update
         
-    return Mu,Sigma,Phi
+    if covariance_type == 'spherical':
+        
+        for i in range(K):
+            
+            Sigma_new[i,:,:] = Sigma_new.mean(axis = 0)
+            
+    if covariance_type == 'tied':
+        
+        for i in range(K):
+            
+            Sigma_new[i,:,:] = Sigma_new.mean(axis = 0)
+        
+    return Mu_new,Sigma_new,Phi_new
 
 def calculate_negative_likelihood(W,X,Mu,Sigma,Phi):
     K = len(Mu)
@@ -242,7 +284,7 @@ def calculate_negative_likelihood(W,X,Mu,Sigma,Phi):
         
     return -l
 
-def GMM(X,K,eps = 1e-3, max_iter = 100):
+def GMM(X,K,covariance_type,eps = 1e-3, max_iter = 100):
     
     fig_list = []
     fig, ax = plt.subplots(figsize = (16,9),dpi = 100)
@@ -276,7 +318,7 @@ def GMM(X,K,eps = 1e-3, max_iter = 100):
 
         W = e_step(X,Mu,Sigma,Phi,W)
 
-        Mu,Sigma,Phi = m_step(X,W,Mu,Sigma,Phi)
+        Mu,Sigma,Phi = m_step(X,W,Mu,Sigma,Phi,covariance_type)
 
         l = calculate_negative_likelihood(W,X,Mu,Sigma,Phi)
 
