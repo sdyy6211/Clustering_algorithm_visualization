@@ -616,7 +616,12 @@ def plot_dendrogram(steps,C):
         
     return [Image.open(f) for f in fig_list]
 
-def Hierarchical_clustering(X,method = upgma, distance_measurement = 'euclidean'):
+def Hierarchical_clustering(X,method = 'average', distance_measurement = 'euclidean'):
+
+    method = {'average':upgma,
+              'complete':complege,
+              'single':single}[method]
+
     Clusters_list,steps,figure = hierarchical_clustering(X,method = method, distance_measurement = distance_measurement)
     dfig = plot_dendrogram(steps,Clusters_list)
 
