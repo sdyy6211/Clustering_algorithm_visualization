@@ -382,13 +382,7 @@ def complete(x,y,distance_measurement = 'euclidean'):
         
         raise(NotImplementedError)
         
-    try:
-        
-        return dis[np.tril_indices_from(dis,k = -1)].max()
-    
-    except:
-        
-        return dis[np.tril_indices_from(dis)].max()
+    return dis.max()
 
 def single(x,y,distance_measurement = 'euclidean'):
     
@@ -403,13 +397,8 @@ def single(x,y,distance_measurement = 'euclidean'):
     else:
         
         raise(NotImplementedError)
-    try:
-        
-        return dis[np.tril_indices_from(dis,k = -1)].min()
-    
-    except:
-        
-        return dis[np.tril_indices_from(dis)].min()
+
+    return dis.min()
 
 def calculate_intra_dis(C,method = upgma, distance_measurement = 'euclidean'):
     
