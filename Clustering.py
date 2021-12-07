@@ -360,13 +360,56 @@ def upgma(x,y,distance_measurement = 'euclidean'):
     
     if distance_measurement == 'euclidean':
     
-        dis = np.linalg.norm(x[:,None,:] - y,axis = 2).sum()
+        dis = np.linalg.norm(x[:,None,:] - y,axis = 2)
         
     else:
         
         raise(NotImplementedError)
         
-    return dis/(x.shape[0]*y.shape[0])
+    return dis.sum()/(x.shape[0]*y.shape[0])
+
+def complete(x,y,distance_measurement = 'euclidean'):
+    
+    x = x.reshape(-1,2)
+    
+    y = y.reshape(-1,2)
+    
+    if distance_measurement == 'euclidean':
+    
+        dis = np.linalg.norm(x[:,None,:] - y,axis = 2)
+        
+    else:
+        
+        raise(NotImplementedError)
+        
+    try:
+        
+        return dis[np.tril_indices_from(dis,k = -1)].max()
+    
+    except:
+        
+        return dis[np.tril_indices_from(dis)].max()
+
+def single(x,y,distance_measurement = 'euclidean'):
+    
+    x = x.reshape(-1,2)
+    
+    y = y.reshape(-1,2)
+    
+    if distance_measurement == 'euclidean':
+    
+        dis = np.linalg.norm(x[:,None,:] - y,axis = 2)
+        
+    else:
+        
+        raise(NotImplementedError)
+    try:
+        
+        return dis[np.tril_indices_from(dis,k = -1)].min()
+    
+    except:
+        
+        return dis[np.tril_indices_from(dis)].min()
 
 def calculate_intra_dis(C,method = upgma, distance_measurement = 'euclidean'):
     
@@ -421,6 +464,10 @@ def hierarchical_clustering(X,method = upgma, distance_measurement = 'euclidean'
     
     N = X.shape[0]
     
+    method = {'average':upgma,
+              'complete':complete,
+              'single':single}[method]
+
     C = []
 
     Clusters_list = dict()
