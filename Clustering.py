@@ -463,10 +463,6 @@ def find_nearest_neighbour(C,method = upgma, distance_measurement = 'euclidean')
 def hierarchical_clustering(X,method = upgma, distance_measurement = 'euclidean'):
     
     N = X.shape[0]
-    
-    method = {'average':upgma,
-              'complete':complete,
-              'single':single}[method]
 
     C = []
 
