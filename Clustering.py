@@ -5,10 +5,19 @@ from scipy.spatial import ConvexHull
 import random
 import io
 from PIL import Image
+from IPython.display import display,clear_output
+import time
+import warnings
+warnings.filterwarnings("ignore", category=RuntimeWarning)
 
-colors = ['red','green','purple','blue','orange','pink']
+colors = ['red','green','purple','blue','orange','pink',
+          'red','green','purple','blue','orange','pink',
+          'red','green','purple','blue','orange','pink',
+          'red','green','purple','blue','orange','pink',
+          'red','green','purple','blue','orange','pink',
+          'red','green','purple','blue','orange','pink']
 
-def Kmeans(data,k,eps,init_num = 10):
+def Kmeans(data,k, init_num,eps = 1e-3):
     
     centroids_list = np.zeros((init_num,k,data.shape[1]))
     
@@ -22,8 +31,8 @@ def Kmeans(data,k,eps,init_num = 10):
         fig, ax = plt.subplots(figsize = (16,9),dpi = 100)
         ax.set_xlim(min(data[:,0])-abs(min(data[:,0])*0.1),max(data[:,0])+abs(max(data[:,0])*0.1))
         ax.set_ylim(min(data[:,1])-abs(min(data[:,1])*0.1),max(data[:,1])+abs(max(data[:,1])*0.1))
-        plt.tight_layout()
         ax.set_title('loss: -')
+        plt.tight_layout()
         plt.close()
         
         ax.scatter(data[:,0],data[:,1],alpha = 0.5)
@@ -291,10 +300,10 @@ def GMM(X,K,covariance_type,eps = 1e-3, max_iter = 100):
     ax.set_xlim(min(X[:,0])-abs(min(X[:,0])*0.1),max(X[:,0])+abs(max(X[:,0])*0.1))
     ax.set_ylim(min(X[:,1])-abs(min(X[:,1])*0.1),max(X[:,1])+abs(max(X[:,1])*0.1))
     ax.set_title('loss: -')
+    ax.scatter(X[:,0],X[:,1],alpha = 0.5)
     plt.tight_layout()
     plt.close()
-    ax.scatter(X[:,0],X[:,1],alpha = 0.5)
-    
+
     img_buf = io.BytesIO()
     fig.savefig(img_buf, format='png')
     img_buf.detach
@@ -313,8 +322,6 @@ def GMM(X,K,covariance_type,eps = 1e-3, max_iter = 100):
         fig, ax = plt.subplots(figsize = (16,9),dpi = 100)
         ax.set_xlim(min(X[:,0])-abs(min(X[:,0])*0.1),max(X[:,0])+abs(max(X[:,0])*0.1))
         ax.set_ylim(min(X[:,1])-abs(min(X[:,1])*0.1),max(X[:,1])+abs(max(X[:,1])*0.1))
-        plt.tight_layout()
-        plt.close()
 
         W = e_step(X,Mu,Sigma,Phi,W)
 
@@ -346,6 +353,8 @@ def GMM(X,K,covariance_type,eps = 1e-3, max_iter = 100):
         
         
         ax.set_title('likelihood: {0}'.format(l))
+        plt.tight_layout()
+        plt.close()
         
         img_buf = io.BytesIO()
         fig.savefig(img_buf, format='png')
@@ -354,7 +363,7 @@ def GMM(X,K,covariance_type,eps = 1e-3, max_iter = 100):
         fig_list.append(img_buf)
         
         Mu_prev = Mu.copy()
-        
+    plt.close()
     return Mu,Sigma,Phi,W,[Image.open(f) for f in fig_list]
 
 
@@ -515,10 +524,9 @@ def hierarchical_clustering(X,method = upgma, distance_measurement = 'euclidean'
 
         ax.set_xlim(min(X[:,0])-abs(min(X[:,0])*0.1),max(X[:,0])+abs(max(X[:,0])*0.1))
         ax.set_ylim(min(X[:,1])-abs(min(X[:,1])*0.1),max(X[:,1])+abs(max(X[:,1])*0.1))
-
-        plt.tight_layout()
         
         ax.set_title('merge: {0}'.format(str(counter+1)))
+        plt.tight_layout()
         
         ax.scatter(X[:,0],X[:,1],color = 'blue',s = 200,alpha = 0.3)
         
@@ -646,7 +654,7 @@ def plot_dendrogram(steps,C):
 def Hierarchical_clustering(X,method = 'average', distance_measurement = 'euclidean'):
 
     method = {'average':upgma,
-              'complete':complege,
+              'complete':complete,
               'single':single}[method]
 
     Clusters_list,steps,figure = hierarchical_clustering(X,method = method, distance_measurement = distance_measurement)
@@ -890,3 +898,9 @@ def regionQuery(D, P, eps):
             neighbors.append(Pn)
             
     return neighbors
+
+def show_image(figures,start,end,interval = 0.1):
+    for i in figures[start:end]:
+        clear_output(wait=True)
+        display(i)
+        time.sleep(interval)
