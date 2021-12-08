@@ -413,6 +413,10 @@ def upgma(x,y,distance_measurement = 'euclidean'):
     
         dis = np.linalg.norm(x[:,None,:] - y,axis = 2)
         
+    elif distance_measurement == 'absolute':
+
+        dis = np.linalg.norm(x[:,None,:] - y,ord=1,axis = 2)
+
     else:
         
         raise(NotImplementedError)
@@ -428,6 +432,10 @@ def complete(x,y,distance_measurement = 'euclidean'):
     if distance_measurement == 'euclidean':
     
         dis = np.linalg.norm(x[:,None,:] - y,axis = 2)
+
+    elif distance_measurement == 'absolute':
+
+        dis = np.linalg.norm(x[:,None,:] - y,ord=1,axis = 2)
         
     else:
         
@@ -444,6 +452,10 @@ def single(x,y,distance_measurement = 'euclidean'):
     if distance_measurement == 'euclidean':
     
         dis = np.linalg.norm(x[:,None,:] - y,axis = 2)
+
+    elif distance_measurement == 'absolute':
+
+        dis = np.linalg.norm(x[:,None,:] - y,ord=1,axis = 2)
         
     else:
         
@@ -451,7 +463,7 @@ def single(x,y,distance_measurement = 'euclidean'):
 
     return dis.min()
 
-def calculate_intra_dis(C,method = upgma, distance_measurement = 'euclidean'):
+def calculate_intra_dis(C,method, distance_measurement):
     
     Clen = len(C)
     
@@ -488,7 +500,7 @@ def merge_cluster(clusters,
     
     clusters.append(new_clu)
 
-def find_nearest_neighbour(C,method = upgma, distance_measurement = 'euclidean'):
+def find_nearest_neighbour(C,method, distance_measurement):
     
     distances = calculate_intra_dis(C,method = method, distance_measurement = distance_measurement)
     
@@ -500,7 +512,7 @@ def find_nearest_neighbour(C,method = upgma, distance_measurement = 'euclidean')
     
     return a1,a2,distances[a1,a2]
 
-def hierarchical_clustering(X,method = upgma, distance_measurement = 'euclidean'):
+def hierarchical_clustering(X,method, distance_measurement):
     
     N = X.shape[0]
 
@@ -898,6 +910,8 @@ def regionQuery(D, P, eps):
             neighbors.append(Pn)
             
     return neighbors
+
+############################################################################################################
 
 def show_image(figures,start,end,interval = 0.1):
     for i in figures[start:end]:
