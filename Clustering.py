@@ -261,15 +261,19 @@ def m_step(X,W,Mu,Sigma,Phi,covariance_type):
         
     if covariance_type == 'spherical':
         
-        for i in range(K):
-            
-            Sigma_new[i,:,:] = Sigma_new.mean(axis = 0)
-            
-    if covariance_type == 'tied':
+        avgsig = Sigma_new.mean(axis = 0)
         
         for i in range(K):
             
-            Sigma_new[i,:,:] = Sigma_new.mean(axis = 0)
+            Sigma_new[i,:,:] = avgsig
+            
+    if covariance_type == 'tied':
+        
+        avgsig = Sigma_new.mean(axis = 0)
+        
+        for i in range(K):
+            
+            Sigma_new[i,:,:] = avgsig
         
     return Mu_new,Sigma_new,Phi_new
 
