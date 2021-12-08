@@ -5,7 +5,7 @@ simple implementation of clustering methods on toy dataset
 |:--:| 
 | *Figure1. K-Means* |
 
-![](https://github.com/sdyy6211/clustering_examples/blob/main/animation/gmm.gif?raw=true)
+![](https://github.com/sdyy6211/clustering_examples/blob/main/animation/gmm_.gif?raw=true)
 |:--:| 
 | *Figure2. Gaussian Mixture Model* |
 
