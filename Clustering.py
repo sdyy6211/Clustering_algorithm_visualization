@@ -232,8 +232,12 @@ def m_step(X,W,Mu,Sigma,Phi,covariance_type):
             sigma_update = ((w.reshape(-1,1)*(X-mu))/w.reshape(-1,1).sum(axis = 0)).T@(X-mu)
             
         elif covariance_type == 'tied':
+
+            Mu_new_ = W.T@X / W.sum(axis = 0).reshape(-1,1)
             
-            sigma_update = ((w.reshape(-1,1)*(X-mu))/w.reshape(-1,1).sum(axis = 0)).T@(X-mu)
+            sigma_update = (X.T@X - (W.sum(axis = 0).reshape(-1,1).T*Mu_new_.T)@Mu_new_)/W.sum(axis = 0).sum()
+            
+            #sigma_update = ((w.reshape(-1,1)*(X-mu))/w.reshape(-1,1).sum(axis = 0)).T@(X-mu)
             
         elif covariance_type == 'diag':
             
@@ -259,13 +263,13 @@ def m_step(X,W,Mu,Sigma,Phi,covariance_type):
 
         Phi_new[i,:] = phi_update
             
-    if covariance_type == 'tied':
+    #if covariance_type == 'tied':
         
-        avgsig = Sigma_new.mean(axis = 0)
+    #    avgsig = Sigma_new.mean(axis = 0)
         
-        for i in range(K):
+    #    for i in range(K):
             
-            Sigma_new[i,:,:] = avgsig
+    #        Sigma_new[i,:,:] = avgsig
         
     return Mu_new,Sigma_new,Phi_new
 
