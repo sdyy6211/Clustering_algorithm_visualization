@@ -247,7 +247,7 @@ def m_step(X,W,Mu,Sigma,Phi,covariance_type):
             
             sigma_update = np.zeros((D,D))
             
-            sigma_diag = w.reshape(-1,1).T@(X*X)/w.sum() - 2*mu*(w.reshape(-1,1).T@X)/w.sum()+mu**2
+            sigma_diag = (w.reshape(-1,1).T@(X*X)/w.sum() - 2*mu*(w.reshape(-1,1).T@X)/w.sum()+mu**2).mean()
             
             np.fill_diagonal(sigma_update,sigma_diag)
 
@@ -258,14 +258,6 @@ def m_step(X,W,Mu,Sigma,Phi,covariance_type):
         Sigma_new[i,:,:] = sigma_update
 
         Phi_new[i,:] = phi_update
-        
-    if covariance_type == 'spherical':
-        
-        avgsig = Sigma_new.mean(axis = 0)
-        
-        for i in range(K):
-            
-            Sigma_new[i,:,:] = avgsig
             
     if covariance_type == 'tied':
         
