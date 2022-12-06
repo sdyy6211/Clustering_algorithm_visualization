@@ -11,7 +11,7 @@ In K-Means, 4 centroids are initialized and these 4 centroids moved to find thei
 |:--:| 
 | *Figure2. Gaussian Mixture Model* |
 
-In GMM, 4 Gaussian distributions are initialized and they moved their means and changed their shapes to fit the dataset. The position of distributions is determined by the means and the shape of the distributions is determined by the covariance matrix.
+In GMM, 4 Gaussian distributions are initialized and they moved their means and changed their shapes to fit the dataset. The position of a distribution is determined by the its means and the shape of the distribution is determined by its covariance matrix.
 
 ![](https://github.com/sdyy6211/clustering_examples/blob/main/animation/hierarchical_clustering_.gif?raw=true)
 |:--:| 
