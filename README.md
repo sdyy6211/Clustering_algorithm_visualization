@@ -1,5 +1,5 @@
 # clustering_examples
-simple implementation of clustering methods on toy dataset
+simple implementation of clustering methods on toy dataset https://colab.research.google.com/drive/1EqJDFMsxDwjzp3pdffzUzWCZy7MnkQzk#scrollTo=ePdsbKrrLwhn#offline=true&sandboxMode=true
 
 ![](https://github.com/sdyy6211/clustering_examples/blob/main/animation/kmeans.gif?raw=true)
 |:--:| 
